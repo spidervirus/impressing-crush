@@ -11,13 +11,6 @@ body {
   background-position: center;
   margin: 0;
   overflow-x: hidden;
-  animation: fadeInBackground 1.5s ease-in-out;
-}
-
-/* Background Animation */
-@keyframes fadeInBackground {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
 }
 
 .paper {
@@ -27,22 +20,8 @@ body {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   position: absolute;
   cursor: grab;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   max-width: 90%;  /* Make sure the paper doesn't exceed the viewport width */
-  opacity: 0;
-  animation: slideIn 1s ease forwards;
-}
-
-/* Paper Slide-In Animation */
-@keyframes slideIn {
-  0% {
-    transform: translateY(50px);
-    opacity: 0;
-  }
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
 }
 
 .paper img {
@@ -51,25 +30,11 @@ body {
   border-radius: 5px;
   display: block;
   margin: 10px 0;
-  animation: fadeIn 2s ease-in-out forwards;
-}
-
-/* Image Fade-In Animation */
-@keyframes fadeIn {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
 }
 
 .paper:hover {
   box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
-  transform: scale(1.05) rotate(3deg);
-  animation: hoverWobble 0.5s ease;
-}
-
-/* Hover Wobble Animation */
-@keyframes hoverWobble {
-  0%, 100% { transform: scale(1.05) rotate(3deg); }
-  50% { transform: scale(1.05) rotate(-3deg); }
+  transform: scale(1.05);
 }
 
 /* Styles for Desktop Screens */
@@ -103,13 +68,6 @@ body {
   background-color: rgba(0, 0, 0, 0.8);
   justify-content: center;
   align-items: center;
-  animation: fadeInLightbox 0.5s ease forwards;
-}
-
-/* Lightbox Fade-In Animation */
-@keyframes fadeInLightbox {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
 }
 
 .lightbox-content {
@@ -118,14 +76,6 @@ body {
   margin: auto;
   display: block;
   border-radius: 10px;
-  transform: scale(0.8);
-  animation: zoomIn 0.5s ease forwards;
-}
-
-/* Zoom-In Animation */
-@keyframes zoomIn {
-  0% { transform: scale(0.8); }
-  100% { transform: scale(1); }
 }
 
 .close-lightbox {
@@ -135,13 +85,6 @@ body {
   font-size: 40px;
   color: white;
   cursor: pointer;
-  animation: fadeInClose 1s ease-in-out forwards;
-}
-
-/* Close Button Fade-In */
-@keyframes fadeInClose {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
 }
 
 @media (min-width: 768px) {
