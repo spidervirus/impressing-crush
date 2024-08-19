@@ -1,51 +1,77 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>CodePen - Drag Papers ❤️</title>
-  <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Short+Stack&amp;family=Homemade+Apple&amp;display=swap'><link rel="stylesheet" href="./style.css">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drag Papers ❤️</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Short+Stack&family=Homemade+Apple&display=swap">
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-<div class="paper heart">
 
-</div>
+  <div class="paper heart"></div>
 
-  
-<div class="paper image">
-  <p> and I fallen in</p>
-    <p>Love with You 😍 </p>
-   <img src="images/1.jpg" />
-</div>
+  <div class="paper image">
+    <p>And I fell in</p>
+    <p>Love with You 😍</p>
+    <img src="images/1.jpg" alt="Love Image 1" class="lightbox-img" onerror="this.onerror=null; this.src='images/fallback.jpg'">
+  </div>
 
-<div class="paper image">
-  <p</p>
-  <img src="images/2.jpg" />
-</div>
+  <div class="paper image">
+    <p></p>
+    <img src="images/2.jpg" alt="Love Image 2" class="lightbox-img" onerror="this.onerror=null; this.src='images/fallback.jpg'">
+  </div>
 
-<div class="paper image">
-  <p>How can be </p>
-   <p> someone so cute ❤️ </p>
+  <div class="paper image">
+    <p>How can be</p>
+    <p>someone so cute ❤️</p>
+    <img src="images/3.jpg" alt="Cute Image" class="lightbox-img" onerror="this.onerror=null; this.src='images/fallback.jpg'">
+  </div>
 
-  <img src="images/3.jpg" />
-</div>
+  <div class="paper red">
+    <p>And My Favorite</p>
+    <p>Person 😍</p>
+  </div>
 
+  <div class="paper">
+    <p>You are Cute</p>
+    <p>Amazing <span class="red-heart">❤️</span></p>
+  </div>
 
+  <div class="paper">
+    <p>Drag the papers to move!</p>
+  </div>
 
-<div class="paper red">
-<p class="p1"> and My Favorite</p>
-<p class="p2">Person 😍</p>
-</div>
+  <!-- Lightbox Overlay -->
+  <div id="lightbox" class="lightbox">
+    <span class="close-lightbox">&times;</span>
+    <img class="lightbox-content" id="lightbox-image">
+  </div>
 
-<div class="paper">
-<p class="p1">You are Cute </p>
-  <p class="p1">Amazing <span style="color: red !important;">❤️</span></p>
-</div>
+  <script src="./mobile.js"></script>
+  <script>
+    // Lightbox Functionality
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const closeLightbox = document.querySelector('.close-lightbox');
 
-<div class="paper">
-<p class="p1">Drag the papers to move!</p>
-</div>
-  <script  src="./mobile.js"></script>
+    document.querySelectorAll('.lightbox-img').forEach(img => {
+      img.addEventListener('click', function() {
+        lightbox.style.display = 'block';
+        lightboxImage.src = this.src;
+      });
+    });
 
+    closeLightbox.addEventListener('click', () => {
+      lightbox.style.display = 'none';
+    });
+
+    // Close lightbox on clicking outside the image
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) {
+        lightbox.style.display = 'none';
+      }
+    });
+  </script>
 </body>
 </html>
