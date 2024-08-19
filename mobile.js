@@ -17,9 +17,10 @@ class Paper {
     this.rotating = false;
 
     // Bind event handlers
-    this.handleMove = this.throttle(this.handleMove.bind(this), 16); // Throttle to 60fps
+    this.handleMove = this.handleMove.bind(this);
     this.handleEnd = this.handleEnd.bind(this);
     this.handleStart = this.handleStart.bind(this);
+    this.updateTransform = this.updateTransform.bind(this);
   }
 
   init(paper) {
@@ -68,7 +69,8 @@ class Paper {
       this.rotation = (angle * 180 / Math.PI + 360) % 360;
     }
 
-    this.updateTransform();
+    // Request an animation frame to update the transform
+    requestAnimationFrame(this.updateTransform);
 
     this.prevX = touch.clientX;
     this.prevY = touch.clientY;
@@ -87,26 +89,6 @@ class Paper {
     window.removeEventListener('mouseup', this.handleEnd);
     window.removeEventListener('touchmove', this.handleMove);
     window.removeEventListener('touchend', this.handleEnd);
-  }
-
-  throttle(func, limit) {
-    let lastFunc;
-    let lastRan;
-    return function(...args) {
-      const context = this;
-      if (!lastRan) {
-        func.apply(context, args);
-        lastRan = Date.now();
-      } else {
-        clearTimeout(lastFunc);
-        lastFunc = setTimeout(function() {
-          if ((Date.now() - lastRan) >= limit) {
-            func.apply(context, args);
-            lastRan = Date.now();
-          }
-        }, limit - (Date.now() - lastRan));
-      }
-    };
   }
 }
 
