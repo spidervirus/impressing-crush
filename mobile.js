@@ -17,7 +17,7 @@ class Paper {
     this.rotating = false;
 
     // Bind event handlers
-    this.handleMove = this.handleMove.bind(this);
+    this.handleMove = this.throttle(this.handleMove.bind(this), 16); // Throttle to 60fps
     this.handleEnd = this.handleEnd.bind(this);
     this.handleStart = this.handleStart.bind(this);
   }
@@ -68,10 +68,14 @@ class Paper {
       this.rotation = (angle * 180 / Math.PI + 360) % 360;
     }
 
-    this.paper.style.transform = `translateX(${this.currentX}px) translateY(${this.currentY}px) rotateZ(${this.rotation}deg)`;
+    this.updateTransform();
 
     this.prevX = touch.clientX;
     this.prevY = touch.clientY;
+  }
+
+  updateTransform() {
+    this.paper.style.transform = `translateX(${this.currentX}px) translateY(${this.currentY}px) rotateZ(${this.rotation}deg)`;
   }
 
   handleEnd() {
@@ -85,13 +89,24 @@ class Paper {
     window.removeEventListener('touchend', this.handleEnd);
   }
 
-  handleGestureStart(e) {
-    e.preventDefault();
-    this.rotating = true;
-  }
-
-  handleGestureEnd() {
-    this.rotating = false;
+  throttle(func, limit) {
+    let lastFunc;
+    let lastRan;
+    return function(...args) {
+      const context = this;
+      if (!lastRan) {
+        func.apply(context, args);
+        lastRan = Date.now();
+      } else {
+        clearTimeout(lastFunc);
+        lastFunc = setTimeout(function() {
+          if ((Date.now() - lastRan) >= limit) {
+            func.apply(context, args);
+            lastRan = Date.now();
+          }
+        }, limit - (Date.now() - lastRan));
+      }
+    };
   }
 }
 
