@@ -1,3 +1,4 @@
+/* Base Styles for Mobile (Default) */
 body {
   font-family: 'Short Stack', sans-serif;
   height: 100vh;
@@ -20,6 +21,15 @@ body {
   position: absolute;
   cursor: grab;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  max-width: 90%;  /* Make sure the paper doesn't exceed the viewport width */
+}
+
+.paper img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+  display: block;
+  margin: 10px 0;
 }
 
 .paper:hover {
@@ -27,17 +37,26 @@ body {
   transform: scale(1.05);
 }
 
-.paper img {
-  max-width: 100%;
-  border-radius: 5px;
-  display: block;
-  margin: 10px 0;
+/* Styles for Desktop Screens */
+@media (min-width: 768px) {
+  body {
+    flex-direction: row;  /* Align papers in a row for larger screens */
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .paper {
+    max-width: 400px;  /* Set a max width for desktop to keep the layout balanced */
+    padding: 20px 40px;
+  }
+
+  .paper img {
+    max-width: 100%;
+    height: auto;
+  }
 }
 
-.red-heart {
-  color: red;
-}
-
+/* Lightbox Styles */
 .lightbox {
   display: none;
   position: fixed;
@@ -68,11 +87,7 @@ body {
   cursor: pointer;
 }
 
-@media (max-width: 768px) {
-  .paper {
-    padding: 15px;
-  }
-
+@media (min-width: 768px) {
   .lightbox-content {
     max-width: 80%;
     max-height: 70%;
