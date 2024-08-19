@@ -3,74 +3,86 @@ let highestZ = 1;
 class Paper {
   constructor() {
     this.holdingPaper = false;
-    this.touchStartX = 0;
-    this.touchStartY = 0;
-    this.prevTouchX = 0;
-    this.prevTouchY = 0;
+    this.startX = 0;
+    this.startY = 0;
+    this.moveX = 0;
+    this.moveY = 0;
+    this.prevX = 0;
+    this.prevY = 0;
     this.velX = 0;
     this.velY = 0;
     this.rotation = Math.random() * 30 - 15;
-    this.currentPaperX = 0;
-    this.currentPaperY = 0;
+    this.currentX = 0;
+    this.currentY = 0;
     this.rotating = false;
 
-    this.handleTouchMove = this.handleTouchMove.bind(this);
-    this.handleTouchEnd = this.handleTouchEnd.bind(this);
-    this.handleGestureStart = this.handleGestureStart.bind(this);
-    this.handleGestureEnd = this.handleGestureEnd.bind(this);
+    // Bind event handlers
+    this.handleMove = this.handleMove.bind(this);
+    this.handleEnd = this.handleEnd.bind(this);
+    this.handleStart = this.handleStart.bind(this);
   }
 
   init(paper) {
     this.paper = paper;
 
-    paper.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: true });
-    paper.addEventListener('gesturestart', this.handleGestureStart, { passive: false });
-    paper.addEventListener('gestureend', this.handleGestureEnd, { passive: false });
+    // Add event listeners for both touch and mouse events
+    paper.addEventListener('mousedown', this.handleStart, { passive: true });
+    paper.addEventListener('touchstart', this.handleStart, { passive: true });
   }
 
-  handleTouchStart(e) {
+  handleStart(e) {
     if (this.holdingPaper) return;
 
     this.holdingPaper = true;
     this.paper.style.zIndex = highestZ++;
-    
-    this.touchStartX = e.touches[0].clientX;
-    this.touchStartY = e.touches[0].clientY;
-    this.prevTouchX = this.touchStartX;
-    this.prevTouchY = this.touchStartY;
 
-    window.addEventListener('touchmove', this.handleTouchMove, { passive: false });
-    window.addEventListener('touchend', this.handleTouchEnd, { passive: true });
+    const touch = e.touches ? e.touches[0] : e;
+
+    this.startX = this.prevX = touch.clientX;
+    this.startY = this.prevY = touch.clientY;
+
+    // Add move and end listeners dynamically based on input type
+    if (e.type === 'mousedown') {
+      window.addEventListener('mousemove', this.handleMove, { passive: false });
+      window.addEventListener('mouseup', this.handleEnd, { passive: true });
+    } else {
+      window.addEventListener('touchmove', this.handleMove, { passive: false });
+      window.addEventListener('touchend', this.handleEnd, { passive: true });
+    }
   }
 
-  handleTouchMove(e) {
+  handleMove(e) {
     e.preventDefault();
 
-    const touch = e.touches[0];
-    this.velX = touch.clientX - this.prevTouchX;
-    this.velY = touch.clientY - this.prevTouchY;
+    const touch = e.touches ? e.touches[0] : e;
+    this.velX = touch.clientX - this.prevX;
+    this.velY = touch.clientY - this.prevY;
 
     if (!this.rotating) {
-      this.currentPaperX += this.velX;
-      this.currentPaperY += this.velY;
+      this.currentX += this.velX;
+      this.currentY += this.velY;
     } else {
-      const dirX = touch.clientX - this.touchStartX;
-      const dirY = touch.clientY - this.touchStartY;
+      const dirX = touch.clientX - this.startX;
+      const dirY = touch.clientY - this.startY;
       const angle = Math.atan2(dirY, dirX);
       this.rotation = (angle * 180 / Math.PI + 360) % 360;
     }
 
-    this.paper.style.transform = `translateX(${this.currentPaperX}px) translateY(${this.currentPaperY}px) rotateZ(${this.rotation}deg)`;
+    this.paper.style.transform = `translateX(${this.currentX}px) translateY(${this.currentY}px) rotateZ(${this.rotation}deg)`;
 
-    this.prevTouchX = touch.clientX;
-    this.prevTouchY = touch.clientY;
+    this.prevX = touch.clientX;
+    this.prevY = touch.clientY;
   }
 
-  handleTouchEnd() {
+  handleEnd() {
     this.holdingPaper = false;
     this.rotating = false;
-    window.removeEventListener('touchmove', this.handleTouchMove);
-    window.removeEventListener('touchend', this.handleTouchEnd);
+
+    // Remove move and end listeners based on input type
+    window.removeEventListener('mousemove', this.handleMove);
+    window.removeEventListener('mouseup', this.handleEnd);
+    window.removeEventListener('touchmove', this.handleMove);
+    window.removeEventListener('touchend', this.handleEnd);
   }
 
   handleGestureStart(e) {
